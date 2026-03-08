@@ -1,86 +1,94 @@
 import { useState, useCallback } from 'react';
 import ShaderBackground from './components/ShaderBackground';
-import MoodboardCard, { type Project } from './components/MoodboardCard';
-import ChatInterface from './components/ChatInterface';
+import DesktopIcon, { type IconConfig } from './components/DesktopIcon';
+import TestimonialsExplosion from './components/TestimonialsExplosion';
+import MapoStudioWindow from './components/MapoStudioWindow';
+import AbilitiesWindow from './components/AbilitiesWindow';
 
-const PROJECTS: Project[] = [
+const ICONS: IconConfig[] = [
   {
-    id: '1',
-    title: 'NOVA Brand System',
-    category: 'Identity',
-    year: '2024',
-    description: 'Complete visual identity for a biotech startup. Everything from mark to motion.',
-    tags: ['branding', 'motion', 'type'],
-    color: '#D4FA70',
-    size: 'lg',
+    id: 'mapo',
+    label: 'Mapo Studio',
+    initialX: 60,
+    initialY: 80,
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect x="6" y="6" width="20" height="20" rx="3" stroke="#5A8A00" strokeWidth="1.5"/>
+        <path d="M6 16h20M16 6v20" stroke="#5A8A00" strokeWidth="1.5"/>
+        <circle cx="16" cy="16" r="3" fill="#D4FA70" stroke="#5A8A00" strokeWidth="1"/>
+      </svg>
+    ),
   },
   {
-    id: '2',
-    title: 'Liminal Space',
-    category: 'Editorial',
-    year: '2024',
-    description: 'Experimental magazine exploring in-between states. 80 pages.',
-    tags: ['print', 'editorial'],
-    color: '#B4E641',
-    size: 'md',
+    id: 'abilities',
+    label: 'Abilities',
+    initialX: 180,
+    initialY: 60,
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M16 4L20 12H28L22 18L24 26L16 21L8 26L10 18L4 12H12L16 4Z" stroke="#5A8A00" strokeWidth="1.5" strokeLinejoin="round" fill="#D4FA70" fillOpacity="0.4"/>
+      </svg>
+    ),
   },
   {
-    id: '3',
-    title: 'Tide Digital',
-    category: 'Web',
-    year: '2023',
-    description: 'Interaction design for a climate data platform.',
-    tags: ['UI', 'data viz'],
-    color: '#8AC900',
-    size: 'sm',
+    id: 'testimonials',
+    label: 'Testimonials',
+    initialX: 300,
+    initialY: 100,
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M4 8C4 6.9 4.9 6 6 6H26C27.1 6 28 6.9 28 8V20C28 21.1 27.1 22 26 22H18L12 27V22H6C4.9 22 4 21.1 4 20V8Z" stroke="#5A8A00" strokeWidth="1.5" strokeLinejoin="round" fill="#D4FA70" fillOpacity="0.3"/>
+        <path d="M9 12h6M9 16h10" stroke="#5A8A00" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
   },
   {
-    id: '4',
-    title: 'Oblique Type',
-    category: 'Type Design',
-    year: '2023',
-    description: 'A variable typeface exploring weight and rhythm in language.',
-    tags: ['type', 'variable'],
-    color: '#D4FA70',
-    size: 'md',
+    id: 'chat',
+    label: 'Chat',
+    initialX: 100,
+    initialY: 240,
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="14" r="9" stroke="#5A8A00" strokeWidth="1.5" fill="#D4FA70" fillOpacity="0.3"/>
+        <path d="M10 22l-4 5 5-2" stroke="#5A8A00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 13h8M12 17h5" stroke="#5A8A00" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
   },
   {
-    id: '5',
-    title: 'Fragments',
-    category: 'Art Direction',
-    year: '2024',
-    description: 'Campaign for a fashion label. Shooting, direction, retouching.',
-    tags: ['photo', 'campaign'],
-    color: '#B4E641',
-    size: 'sm',
+    id: 'projects',
+    label: 'Projects',
+    initialX: 260,
+    initialY: 220,
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect x="4" y="10" width="24" height="18" rx="2" stroke="#5A8A00" strokeWidth="1.5" fill="#D4FA70" fillOpacity="0.3"/>
+        <path d="M4 14h24" stroke="#5A8A00" strokeWidth="1.5"/>
+        <path d="M4 10l5-5h14l5 5" stroke="#5A8A00" strokeWidth="1.5" strokeLinejoin="round"/>
+        <rect x="10" y="18" width="12" height="4" rx="1" fill="#5A8A00" fillOpacity="0.3" stroke="#5A8A00" strokeWidth="1"/>
+      </svg>
+    ),
   },
   {
-    id: '6',
-    title: 'System / Memory',
-    category: 'Installation',
-    year: '2022',
-    description: 'Interactive data art installation. 3,000 visitors.',
-    tags: ['code', 'art', 'data'],
-    color: '#5A8A00',
-    size: 'lg',
+    id: 'faves',
+    label: 'Faves',
+    initialX: 420,
+    initialY: 160,
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M16 26S6 19 6 12a6 6 0 0112 0 6 6 0 0112 0c0 7-10 14-10 14z" stroke="#5A8A00" strokeWidth="1.5" strokeLinejoin="round" fill="#D4FA70" fillOpacity="0.4"/>
+      </svg>
+    ),
   },
-];
-
-const INITIAL_POSITIONS = [
-  { x: 60,  y: 80,  rot: -3 },
-  { x: 300, y: 160, rot: 2.5 },
-  { x: 80,  y: 340, rot: 1.5 },
-  { x: 420, y: 80,  rot: -1.5 },
-  { x: 240, y: 420, rot: 3 },
-  { x: 520, y: 300, rot: -2 },
 ];
 
 export default function App() {
   const [zIndexMap, setZIndexMap] = useState<Record<string, number>>(
-    Object.fromEntries(PROJECTS.map((p, i) => [p.id, i + 1]))
+    Object.fromEntries(ICONS.map((ic, i) => [ic.id, i + 1]))
   );
-  const [maxZ, setMaxZ] = useState(PROJECTS.length);
-  const [shaderActive, setShaderActive] = useState(false);
+  const [maxZ, setMaxZ] = useState(ICONS.length);
+  const [openWindow, setOpenWindow] = useState<string | null>(null);
+  void maxZ;
 
   const bringToFront = useCallback((id: string) => {
     setMaxZ(prev => {
@@ -90,39 +98,71 @@ export default function App() {
     });
   }, []);
 
+  const handleOpen = useCallback((id: string) => {
+    setOpenWindow(id);
+  }, []);
+
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', background: '#fff' }}>
-      <ShaderBackground isActive={shaderActive} />
+      <ShaderBackground isActive={false} />
 
-      {PROJECTS.map((project, i) => (
-        <MoodboardCard
-          key={project.id}
-          project={project}
-          initialX={INITIAL_POSITIONS[i].x}
-          initialY={INITIAL_POSITIONS[i].y}
-          rotation={INITIAL_POSITIONS[i].rot}
-          zIndex={zIndexMap[project.id]}
-          onBringToFront={bringToFront}
-        />
-      ))}
-
+      {/* Menubar */}
       <div style={{
         position: 'fixed',
-        top: 24,
-        left: 24,
-        zIndex: 50,
-        fontFamily: 'ui-monospace, Menlo, monospace',
-        fontSize: '0.6rem',
-        letterSpacing: '0.1em',
-        textTransform: 'uppercase',
-        color: '#4A7000',
-        opacity: 0.5,
-        pointerEvents: 'none',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 28,
+        background: 'rgba(255,255,255,0.7)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(90,138,0,0.12)',
+        zIndex: 500,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 16px',
       }}>
-        DRAG TO EXPLORE →
+        <span style={{
+          fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", Helvetica, sans-serif',
+          fontSize: '0.72rem',
+          fontWeight: 600,
+          color: '#1A2800',
+          letterSpacing: '-0.01em',
+        }}>
+          audreycaprianni.com
+        </span>
+        <span style={{
+          fontFamily: 'ui-monospace, Menlo, monospace',
+          fontSize: '0.6rem',
+          color: '#4A7000',
+          opacity: 0.6,
+          letterSpacing: '0.05em',
+        }}>
+          {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </span>
       </div>
 
-      <ChatInterface onTyping={setShaderActive} />
+      {openWindow === 'testimonials' && (
+        <TestimonialsExplosion onClose={() => setOpenWindow(null)} />
+      )}
+
+      {openWindow === 'mapo' && (
+        <MapoStudioWindow onClose={() => setOpenWindow(null)} />
+      )}
+
+      {openWindow === 'abilities' && (
+        <AbilitiesWindow onClose={() => setOpenWindow(null)} />
+      )}
+
+      {ICONS.map(icon => (
+        <DesktopIcon
+          key={icon.id}
+          config={icon}
+          zIndex={zIndexMap[icon.id]}
+          onBringToFront={bringToFront}
+          onOpen={handleOpen}
+        />
+      ))}
     </div>
   );
 }
