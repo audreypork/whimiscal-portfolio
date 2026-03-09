@@ -12,7 +12,10 @@ interface Props {
 
 export default function MapoStudioWindow({ onClose }: Props) {
   const [activeTab, setActiveTab] = useState(0);
-  const [pos, setPos] = useState({ x: 80, y: 60 });
+  const [pos, setPos] = useState(() => ({
+    x: Math.max(0, (window.innerWidth - 780) / 2),
+    y: Math.max(0, (window.innerHeight - 520) / 2),
+  }));
   const dragRef = useRef<{ mx: number; my: number; px: number; py: number } | null>(null);
 
   const project = PROJECTS[activeTab];

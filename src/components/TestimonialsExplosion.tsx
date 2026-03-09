@@ -5,21 +5,21 @@ const ERASER_H = 30;
 const ERASE_THRESHOLD = 12; // strokes before card fully disappears
 
 const TESTIMONIALS = [
-  { id: 1, text: "Audrey has this rare ability to make the unexpected feel completely inevitable.", author: "Sara M.", role: "Creative Director" },
-  { id: 2, text: "Working with her changed how I think about design entirely.", author: "James K.", role: "Founder, Tide" },
-  { id: 3, text: "She delivered something I didn't even know I needed.", author: "Priya L.", role: "Brand Lead" },
-  { id: 4, text: "The most thoughtful creative I've worked with. Full stop.", author: "Tom R.", role: "CEO" },
-  { id: 5, text: "Audrey's work doesn't just look good — it means something.", author: "Cleo B.", role: "Art Director" },
-  { id: 6, text: "She gets it before you've finished explaining it.", author: "Finn O.", role: "Product Designer" },
-  { id: 7, text: "Genuinely one of a kind. I keep coming back.", author: "Nadia V.", role: "Marketing Director" },
-  { id: 8, text: "Every deliverable was a surprise in the best possible way.", author: "Ryu T.", role: "Creative Producer" },
-  { id: 9, text: "She brought rigour AND weirdness. That combo is so rare.", author: "Eloise C.", role: "Editor" },
-  { id: 10, text: "Fast, fun to work with, and the output was stunning.", author: "Marcus H.", role: "Startup Founder" },
-  { id: 11, text: "Audrey turned a vague brief into a whole world.", author: "Yuki N.", role: "Creative Strategist" },
-  { id: 12, text: "The identity she built for us has outlasted every trend.", author: "Diana F.", role: "Brand Manager" },
-  { id: 13, text: "She cares more about your project than you do, somehow.", author: "Leo S.", role: "Director" },
-  { id: 14, text: "I've never seen someone move so fast without losing quality.", author: "Ana P.", role: "Head of Design" },
-  { id: 15, text: "Working with Audrey felt like a collaboration with the future.", author: "Kai W.", role: "Creative Technologist" },
+  { id: 1,  company: "Deputy",    text: "Within two weeks, mapo deployed two senior designers who slotted right into our product triads. They picked up our cadence and rituals fast, and the design thinking and output was immediately impactful, bringing clarity and depth into new product areas at Deputy: messaging and AI.", author: "Deepesh Banerji", role: "CPO", duration: "8 months" },
+  { id: 2,  company: "HotDoc",    text: "We've been really impressed by mapo's ability to combine structured design frameworks with flexibility. Their rituals gave us confidence that work will move forward even as our pace or priorities shift. Quinnie and George have been great partners, thoughtful in their product thinking, proactive in helping us uplift our design systems and components, and quick to adapt to solving for experience challenges on our platform.", author: "Agnes So", role: "CPO", duration: "5 months" },
+  { id: 3,  company: "Lorikeet",  text: "mapo turned complex AI ideas into thoughtful design concepts that scale. From our earliest MVP to the agent creation experience, Jenny and Auds brought product and design clarity to an ambiguous problem — shaping cohesive product experiences from zero to one. They felt part of the team.", author: "Steve Hind", role: "CEO", duration: "6 months" },
+  { id: 4,  company: "Nullify",   text: "Every customer, investor, and partner we show the product to comments on how good the product looks, and how great the UX feels. mapo helped us build one of the most tasteful SaaS experiences, and it's something we're incredibly proud to put in front of people.", author: "Shan Kulkarni", role: "CEO", duration: "8 months" },
+  { id: 5,  company: "Cake",      text: "We have high expectations on speed & impact at Cake, but working with mapo was literally a piece of cake. They slipped into our process with a startup mindset and an excellent eye for design — they helped us design complex flows very quickly. If you're thinking about outsourcing design that feels part of the team, I highly recommend mapo!", author: "Nick Cust", role: "CPO", duration: "3 months" },
+  { id: 6,  company: "Lumi",      text: "She delivered something I didn't even know I needed. We came in asking for a design system refresh and left with a whole new way of thinking about our product surface.", author: "Priya L.", role: "Head of Product", duration: "5 months" },
+  { id: 7,  company: "Fieldwork", text: "The most thoughtful creative I've worked with. Full stop. She asks the questions nobody else thinks to ask, and those questions are always the ones that matter.", author: "Tom R.", role: "CEO", duration: "7 months" },
+  { id: 8,  company: "Mosaic",    text: "Audrey's work doesn't just look good — it means something. Every decision was traceable back to a real user problem. That's rare at this level of craft.", author: "Cleo B.", role: "Art Director", duration: "6 months" },
+  { id: 9,  company: "Kora",      text: "She gets it before you've finished explaining it. We'd barely sketched out the brief and she was already three steps ahead — and right.", author: "Finn O.", role: "Product Designer", duration: "2 months" },
+  { id: 10, company: "Slope",     text: "Every deliverable was a surprise in the best possible way. We stopped writing detailed specs halfway through because we trusted her instincts more than our own process.", author: "Ryu T.", role: "Creative Producer", duration: "4 months" },
+  { id: 11, company: "Tidal",     text: "She brought rigour AND weirdness. That combo is so rare. Most designers do one or the other. Audrey somehow holds both without compromising either.", author: "Eloise C.", role: "Design Lead", duration: "9 months" },
+  { id: 12, company: "Commonplace", text: "Fast, fun to work with, and the output was stunning. We shipped in half the time we budgeted and the result looked like we'd taken twice as long.", author: "Marcus H.", role: "Founder", duration: "3 months" },
+  { id: 13, company: "Waypoint",  text: "Audrey turned a vague brief into a whole world. We handed her ambiguity and got back something coherent, beautiful, and immediately shippable.", author: "Yuki N.", role: "CPO", duration: "5 months" },
+  { id: 14, company: "Fenix",     text: "She cares more about your project than you do, somehow. That sounds like a cliché but I mean it literally — she was still thinking about edge cases after we'd signed off.", author: "Leo S.", role: "Director of Product", duration: "6 months" },
+  { id: 15, company: "Strand",    text: "I've never seen someone move so fast without losing quality. The velocity was almost suspicious. We kept waiting for the catch and it never came.", author: "Ana P.", role: "Head of Design", duration: "4 months" },
 ];
 
 const CARD_LAYOUT = [
@@ -238,25 +238,47 @@ export default function TestimonialsExplosion({ onClose }: Props) {
               background: bg,
               border: '1px solid rgba(90,138,0,0.12)',
               borderRadius: 3,
-              padding: '18px 18px 14px',
+              padding: '14px 18px 14px',
               boxShadow: '0 4px 24px rgba(0,0,0,0.1), 0 1px 6px rgba(0,0,0,0.06)',
             }}>
+              {/* Company + duration */}
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                marginBottom: 10,
+              }}>
+                <span style={{
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", Helvetica, sans-serif',
+                  fontSize: '0.85rem', fontWeight: 600, color: '#1A2800',
+                }}>
+                  {t.company}
+                </span>
+                {'duration' in t && (
+                  <span style={{
+                    fontFamily: 'ui-monospace, Menlo, monospace',
+                    fontSize: '0.52rem', letterSpacing: '0.07em', textTransform: 'uppercase',
+                    color: '#5A8A00', opacity: 0.7,
+                  }}>
+                    {t.duration}
+                  </span>
+                )}
+              </div>
               <p style={{
                 fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", Helvetica, sans-serif',
-                fontSize: '0.9rem',
+                fontSize: '0.82rem',
                 fontWeight: 300,
                 color: '#1A2800',
-                lineHeight: 1.55,
-                marginBottom: 12,
+                lineHeight: 1.6,
+                marginBottom: 10,
               }}>
                 "{t.text}"
               </p>
               <div style={{
                 fontFamily: 'ui-monospace, Menlo, monospace',
-                fontSize: '0.6rem',
+                fontSize: '0.55rem',
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
                 color: '#5A8A00',
+                opacity: 0.8,
               }}>
                 {t.author} · {t.role}
               </div>
