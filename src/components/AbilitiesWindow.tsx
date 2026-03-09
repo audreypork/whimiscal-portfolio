@@ -389,7 +389,7 @@ export default function AbilitiesWindow({ onClose }: Props) {
           letterSpacing: '0.07em', textTransform: 'uppercase',
           color: '#1A2800', opacity: 0.2, whiteSpace: 'nowrap', pointerEvents: 'none',
         }}>
-          space to jump
+          ← → · space jump
         </div>
       </div>
     </div>
