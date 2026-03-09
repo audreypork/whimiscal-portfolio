@@ -283,10 +283,27 @@ export default function AbilitiesWindow({ onClose }: Props) {
     // T vertical stem — fixed at screen center, drops below floor
     const vp = vPRef.current;
     if (vp > 0) {
+      const stemEnd = FLOOR_Y + vp * H * 0.40;
       ctx.beginPath();
       ctx.moveTo(W / 2, FLOOR_Y);
-      ctx.lineTo(W / 2, FLOOR_Y + vp * H * 0.40);
+      ctx.lineTo(W / 2, stemEnd);
       ctx.stroke();
+
+      // Vertical label along the stem
+      if (vp > 0.5) {
+        const stemMid = FLOOR_Y + (stemEnd - FLOOR_Y) / 2;
+        ctx.save();
+        ctx.translate(W / 2 - 7, stemMid);
+        ctx.rotate(-Math.PI / 2);
+        ctx.font = '500 9px ui-monospace, Menlo, monospace';
+        ctx.fillStyle = '#1A2800';
+        ctx.globalAlpha = (vp - 0.5) * 2;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('DESIGN COMPLEX B2B AI APPS', 0, 0);
+        ctx.globalAlpha = 1;
+        ctx.restore();
+      }
     }
 
     // Platforms
@@ -367,7 +384,7 @@ export default function AbilitiesWindow({ onClose }: Props) {
           style={{ position: 'absolute', inset: 0, imageRendering: 'pixelated', pointerEvents: 'none' }}
         />
         <div style={{
-          position: 'absolute', bottom: 14, left: '50%', transform: 'translateX(-50%)',
+          position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)',
           fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '0.5rem',
           letterSpacing: '0.07em', textTransform: 'uppercase',
           color: '#1A2800', opacity: 0.2, whiteSpace: 'nowrap', pointerEvents: 'none',
