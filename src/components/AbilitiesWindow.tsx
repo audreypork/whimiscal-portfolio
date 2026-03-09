@@ -55,7 +55,7 @@ const NAV_H    = 44;
 const WIN_W    = 720;
 const WIN_H    = 460;
 const BODY_H   = WIN_H - NAV_H;               // 416
-const FLOOR_Y  = Math.round(BODY_H * 0.70);   // 291 — floor surface (screen Y, fixed)
+const FLOOR_Y  = Math.round(BODY_H * 0.58);   // 241 — floor surface (screen Y, fixed)
 const GRAVITY  = 0.55;
 const JUMP_V   = -13;
 const PILL_H   = 26;
@@ -384,12 +384,12 @@ export default function AbilitiesWindow({ onClose }: Props) {
           style={{ position: 'absolute', inset: 0, imageRendering: 'pixelated', pointerEvents: 'none' }}
         />
         <div style={{
-          position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)',
+          position: 'absolute', bottom: 14, right: 16,
           fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '0.5rem',
           letterSpacing: '0.07em', textTransform: 'uppercase',
           color: '#1A2800', opacity: 0.2, whiteSpace: 'nowrap', pointerEvents: 'none',
         }}>
-          ← → walk · ↑ space jump
+          space to jump
         </div>
       </div>
     </div>
