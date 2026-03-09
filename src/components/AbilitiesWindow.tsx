@@ -65,7 +65,7 @@ const CAM_FRAC = 0.38; // character rests at 38% from left
 const PILL_CONTENT = [
   { text: 'unstoppable project starter',                  w: 232 },
   { text: 'brings awkward to big groups',                 w: 224 },
-  { text: 'sells $51k design contracts',                  w: 216 },
+  { text: '$51K design contract dealer',                  w: 216 },
   { text: 'avg 9h 32m instagram a week',                  w: 216 },
   { text: 'ranked platinum in polytopia 51% of the year', w: 336 },
   { text: '17 figma tabs open rn',                        w: 176 },
