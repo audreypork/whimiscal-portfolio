@@ -63,11 +63,15 @@ const CAM_FRAC = 0.38; // character rests at 38% from left
 
 // ─── Content pills ────────────────────────────────────────────────────────────
 const PILL_CONTENT = [
-  { text: 'loves starting new things',                    w: 208 },
-  { text: 'seller of design contracts ($51k a pop)',       w: 292 },
-  { text: 'very awkward in big groups',                   w: 208 },
-  { text: 'avg 9 hrs 32 mins instagram a week',           w: 256 },
+  { text: 'unstoppable project starter',                  w: 232 },
+  { text: 'brings awkward to big groups',                 w: 224 },
+  { text: 'sells $51k design contracts',                  w: 216 },
+  { text: 'avg 9h 32m instagram a week',                  w: 216 },
   { text: 'ranked platinum in polytopia 51% of the year', w: 336 },
+  { text: '17 figma tabs open rn',                        w: 176 },
+  { text: 'vibe code addict',                             w: 144 },
+  { text: 'matcha deleter',                               w: 128 },
+  { text: 'amateur potter',                               w: 128 },
 ];
 
 type Plat = { wx: number; wy: number; w: number; text?: string };
@@ -126,20 +130,24 @@ export default function AbilitiesWindow({ onClose }: Props) {
 
   // ── Init platforms ──────────────────────────────────────────────────────────
   useEffect(() => {
-    // 5 content platforms to the right at set world X positions
-    const contentXs  = [300,  660, 1040, 1440, 1840];
+    // 9 content platforms to the right at set world X positions
+    const contentXs  = [300,  620,  980, 1320, 1680, 2020, 2340, 2660, 2960];
     const contentYs  = [
       FLOOR_Y - 80,
       FLOOR_Y - 115,
       FLOOR_Y - 65,
       FLOOR_Y - 130,
       FLOOR_Y - 90,
+      FLOOR_Y - 110,
+      FLOOR_Y - 70,
+      FLOOR_Y - 120,
+      FLOOR_Y - 85,
     ];
     const content: Plat[] = PILL_CONTENT.map((c, i) => ({
       wx: contentXs[i], wy: contentYs[i], w: c.w, text: c.text,
     }));
     // Extra platforms beyond the content + some to the left
-    const right = makePlats(2100, 1, 20);
+    const right = makePlats(3200, 1, 20);
     const left  = makePlats(-80, -1, 10);
     platsRef.current = [...content, ...right, ...left];
   }, []);
