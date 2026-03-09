@@ -285,7 +285,7 @@ export default function AbilitiesWindow({ onClose }: Props) {
     if (vp > 0) {
       ctx.beginPath();
       ctx.moveTo(W / 2, FLOOR_Y);
-      ctx.lineTo(W / 2, FLOOR_Y + vp * H * 0.22);
+      ctx.lineTo(W / 2, FLOOR_Y + vp * H * 0.40);
       ctx.stroke();
     }
 
