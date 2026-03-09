@@ -21,7 +21,7 @@ const ICONS: IconConfig[] = [
   },
   {
     id: 'abilities',
-    label: 'Abilities',
+    label: 'Skills',
     initialX: 180,
     initialY: 60,
     icon: (

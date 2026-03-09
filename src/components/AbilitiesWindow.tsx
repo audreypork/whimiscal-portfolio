@@ -373,7 +373,7 @@ export default function AbilitiesWindow({ onClose }: Props) {
           fontSize: '0.65rem', letterSpacing: '0.08em', textTransform: 'uppercase',
           color: '#1A2800', opacity: 0.6,
         }}>
-          the most generalist person you'll ever meet
+          my t shaped skill set
         </div>
       </div>
 
