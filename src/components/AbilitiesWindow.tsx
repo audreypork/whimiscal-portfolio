@@ -50,6 +50,43 @@ function drawSprite(ctx: CanvasRenderingContext2D, frame: number[][], x: number,
   );
 }
 
+// ─── Dragon sprite ────────────────────────────────────────────────────────────
+const D = { _: 0, b: 2, g: 3, s: 4 };
+const DSCALE = 3;
+const DW = 10 * DSCALE;
+const DH = 7  * DSCALE;
+const DRAGON_FRAMES: number[][][] = [
+  [ // wings up
+    [0,D.g,D.g,0,0,0,0,0,0,0],
+    [D.g,D.g,D.b,D.g,0,0,0,0,0,0],
+    [0,D.g,D.b,D.b,D.b,D.b,0,0,0,0],
+    [0,D.b,D.b,D.s,D.b,D.b,D.b,D.b,D.b,0],
+    [0,0,D.b,D.b,D.b,D.b,D.b,D.b,D.b,D.b],
+    [0,0,D.g,D.g,D.b,0,0,0,0,0],
+    [0,0,D.b,0,D.b,0,0,0,0,0],
+  ],
+  [ // wings down
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,D.b,D.b,0,0,0,0,0,0,0],
+    [D.b,D.b,D.b,D.b,D.b,D.b,0,0,0,0],
+    [0,D.b,D.b,D.s,D.b,D.b,D.b,D.b,D.b,0],
+    [0,D.g,D.b,D.b,D.b,D.b,D.b,D.b,D.b,D.b],
+    [D.g,D.g,D.g,D.b,D.b,0,0,0,0,0],
+    [0,0,D.b,0,D.b,0,0,0,0,0],
+  ],
+];
+function drawDragon(ctx: CanvasRenderingContext2D, frame: number[][], x: number, y: number) {
+  frame.forEach((row, ry) =>
+    row.forEach((col, rx) => {
+      if (!col) return;
+      ctx.fillStyle = COLORS[col];
+      ctx.fillRect(x + rx * DSCALE, y + ry * DSCALE, DSCALE, DSCALE);
+    })
+  );
+}
+
+const SLOW_FRAMES = 90;
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 const NAV_H    = 44;
 const WIN_W    = 720;
@@ -127,6 +164,9 @@ export default function AbilitiesWindow({ onClose }: Props) {
   const dragRef  = useRef<{ mx: number; my: number; px: number; py: number } | null>(null);
   const hPRef    = useRef(0); // T horizontal progress
   const vPRef    = useRef(0); // T vertical progress
+  const dragonRef = useRef({ wx: -DW - 320, wy: FLOOR_Y - DH - 10, frame: 0, frameTimer: 0 });
+  const slowRef   = useRef(0); // slowdown countdown frames
+  const maxXRef   = useRef(0); // furthest world X reached
 
   // ── Init platforms ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -214,9 +254,10 @@ export default function AbilitiesWindow({ onClose }: Props) {
     const keys = keysRef.current;
 
     // ── Movement ──
+    const spd = slowRef.current > 0 ? 1 : 3;
     char.moving = false;
-    if (keys.left)  { char.wx -= 3; char.facing = 'left';  char.moving = true; }
-    if (keys.right) { char.wx += 3; char.facing = 'right'; char.moving = true; }
+    if (keys.left)  { char.wx -= spd; char.facing = 'left';  char.moving = true; }
+    if (keys.right) { char.wx += spd; char.facing = 'right'; char.moving = true; }
 
     // ── Physics ──
     char.grounded = false;
@@ -261,6 +302,20 @@ export default function AbilitiesWindow({ onClose }: Props) {
     platsRef.current = platsRef.current.filter(p =>
       p.wx + p.w > camX - W * 4 && p.wx < camX + W * 5
     );
+
+    // ── Dragon chase ──
+    const dragon = dragonRef.current;
+    const dragonSpd = keys.right ? 2.1 : 3.4; // faster when player idles
+    dragon.wx += dragonSpd;
+    dragon.wy = FLOOR_Y - DH - 10 + Math.sin(Date.now() / 380) * 7;
+    if (++dragon.frameTimer >= 10) { dragon.frame = (dragon.frame + 1) % 2; dragon.frameTimer = 0; }
+    // Collision → slow player
+    if (dragon.wx + DW > char.wx && dragon.wx < char.wx + SW && slowRef.current === 0) {
+      slowRef.current = SLOW_FRAMES;
+    }
+    if (slowRef.current > 0) slowRef.current--;
+    // Track furthest distance
+    if (char.wx > maxXRef.current) maxXRef.current = char.wx;
 
     // ── Walk animation ──
     if (char.moving && char.grounded) {
@@ -322,8 +377,32 @@ export default function AbilitiesWindow({ onClose }: Props) {
       }
     }
 
-    // Character
+    // Dragon
+    const dsx = dragon.wx - camX;
+    if (dsx + DW > -5 && dsx < W + 5) {
+      drawDragon(ctx, DRAGON_FRAMES[dragon.frame], dsx, dragon.wy);
+    }
+
+    // Character (drawn after dragon so player is always on top)
     drawSprite(ctx, (char.facing === 'right' ? FRAMES_RIGHT : FRAMES_LEFT)[char.frame], char.wx - camX, char.wy);
+
+    // Slowdown flash
+    if (slowRef.current > 0) {
+      ctx.globalAlpha = (slowRef.current / SLOW_FRAMES) * 0.18;
+      ctx.fillStyle = '#FF4400';
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = 1;
+    }
+
+    // Distance score
+    const dist = Math.max(0, Math.floor(maxXRef.current / 8));
+    ctx.fillStyle = '#1A2800';
+    ctx.globalAlpha = 0.25;
+    ctx.font = '500 9px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText(`${dist}m`, W - 14, 14);
+    ctx.globalAlpha = 1;
 
     rafRef.current = requestAnimationFrame(gameLoop);
   }, []);
